@@ -6,14 +6,15 @@ import (
 	"encoding/json"
 	"io/ioutil"
         "os"
+	"log"
 )
 
 type Currency struct {
-	terms string
-	privacy string
-	timestamp int
-	source string
-	quotes map[string]float64
+	Terms string
+	Privacy string
+	Timestamp int
+	Source string
+	Quotes map[string]float64
  }
 
 func main() {
@@ -26,15 +27,15 @@ func main() {
         //"source": "USD",
         //"quotes": {
         //"USDAED": 3.672982,
-        //"USDAFN": 57.8936,
+        //"USDAFN": 57.8936
         //}
         //}
 
 	currency_url := "http://apilayer.net/api/"
-	var live_endpoint string = "live"
-	var access_key string = "?access_key=
-        var api_key string = os.Getenv("CURRENCY_API_KEY")
-        var live_response string = currency_url + live_endpoint + access_key + api_key
+	live_endpoint := "live"
+	access_key := "?access_key="
+        api_key := os.Getenv("CURRENCY_API_KEY")
+        live_response := currency_url + live_endpoint + access_key + api_key
 
 	resp, err := http.Get(live_response)
 
@@ -48,17 +49,17 @@ func main() {
 	jsonDataFromHttp, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-                 panic(err)
+                 log.Fatal("http response broke: %s\n", err)
 	}
 
-	var jsonData []Currency
+	currency_response := Currency{}
 
-	err = json.Unmarshal([]byte(jsonDataFromHttp), &jsonData)
+	err = json.Unmarshal([]byte(jsonDataFromHttp), &currency_response)
 
 	if err != nil {
-		panic(err)
+		log.Fatalf("shit broke: %s\n", err)
 	}
 
 	// test struct data
-	fmt.Println(jsonData)
+	fmt.Println(currency_response)
 }
