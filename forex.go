@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
+        "os"
 )
 
 type Currency struct {
@@ -31,9 +32,9 @@ func main() {
 
 	currency_url := "http://apilayer.net/api/"
 	var live_endpoint string = "live"
-	var access_key string = "?access_key=682a02eef4e5afc26d17dc98678c5472"
-
-        var live_response string = currency_url + live_endpoint + access_key
+	var access_key string = "?access_key=
+        var api_key string = os.Getenv("CURRENCY_API_KEY")
+        var live_response string = currency_url + live_endpoint + access_key + api_key
 
 	resp, err := http.Get(live_response)
 
